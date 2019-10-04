@@ -66,9 +66,9 @@ export class TimePickerComponent implements OnInit {
         this.time.hour = obj.time;
       }
     }
-    const step = (this.clockType === 'minute') ? 6 : 30;
+    const step = (this.clockType === 'minute') ? 30 : 30;
     const time = (this.clockType === 'minute') ? this.time.minute : this.time.hour;
-    const degrees = time * step;
+    const degrees = (this.clockType === 'minute') ? time * 6 : time * step;    
     this.rotationClass(degrees);
     this.setActiveTime();
   }
@@ -85,7 +85,7 @@ export class TimePickerComponent implements OnInit {
   }
 
   getDegree = (ele: any) => {
-    const step = this.clockType === 'minute' ? 6 : 30;
+    const step = this.clockType === 'minute' ? 30 : 30;
     const parrentPos = ele.currentTarget.getBoundingClientRect();
     if (this.isClicked && (ele.currentTarget === ele.target || ele.target.nodeName === 'BUTTON')) {
       const clock = {
@@ -100,7 +100,7 @@ export class TimePickerComponent implements OnInit {
         hour = (degrees / step);
         hour = (hour > 12) ? hour - 12 : hour;
       } else if (this.clockType === 'minute') {
-        minute = (degrees / step);
+        minute = (degrees / 6);
         minute = (minute > 59) ? minute - 60 : minute;
       }
 
@@ -151,6 +151,7 @@ export class TimePickerComponent implements OnInit {
     const m = (this.clockType === 'minute') ? t : this.time.minute;
     const h = (this.clockType === 'hour') ? t : this.time.hour;
     const nowTime = this.GetNowTime(h, this.time.ampm, m);
+    
     return (this.allowed.indexOf(nowTime) === -1) ? true : false;
   }
 
